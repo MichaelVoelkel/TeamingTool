@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1658908550972" clover="3.2.0">
+  <project timestamp="1658908550972" name="All files">
+    <metrics statements="153" coveredstatements="153" conditionals="31" coveredconditionals="31" methods="66" coveredmethods="66" elements="250" coveredelements="250" complexity="0" loc="153" ncloc="153" packages="4" files="7" classes="7"/>
+    <package name="config">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="config.ts" path="/Users/michael/Private/typing/src/domain/config/config.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="7" type="stmt"/>
+      </file>
+    </package>
+    <package name="interactions">
+      <metrics statements="23" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="15" coveredmethods="15"/>
+      <file name="statistics_collector.ts" path="/Users/michael/Private/typing/src/domain/interactions/statistics_collector.ts">
+        <metrics statements="23" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="15" coveredmethods="15"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="27" count="14" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="50" count="4" type="stmt"/>
+        <line num="55" count="4" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="67" count="14" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="session">
+      <metrics statements="85" coveredstatements="85" conditionals="21" coveredconditionals="21" methods="40" coveredmethods="40"/>
+      <file name="detailed_session_statistics.ts" path="/Users/michael/Private/typing/src/domain/session/detailed_session_statistics.ts">
+        <metrics statements="62" coveredstatements="62" conditionals="21" coveredconditionals="21" methods="27" coveredmethods="27"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="20" count="9" type="stmt"/>
+        <line num="21" count="9" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="23" count="9" type="stmt"/>
+        <line num="24" count="9" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="9" type="stmt"/>
+        <line num="28" count="9" type="stmt"/>
+        <line num="29" count="9" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
+        <line num="33" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="10" type="stmt"/>
+        <line num="38" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="5" type="stmt"/>
+        <line num="43" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="15" type="stmt"/>
+        <line num="45" count="15" type="stmt"/>
+        <line num="46" count="15" type="stmt"/>
+        <line num="50" count="27" type="stmt"/>
+        <line num="51" count="27" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="27" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="27" type="stmt"/>
+        <line num="55" count="27" type="stmt"/>
+        <line num="59" count="6" type="stmt"/>
+        <line num="60" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="61" count="6" type="stmt"/>
+        <line num="65" count="2" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="78" count="30" type="stmt"/>
+        <line num="83" count="30" type="stmt"/>
+        <line num="85" count="30" type="stmt"/>
+        <line num="86" count="78" type="cond" truecount="2" falsecount="0"/>
+        <line num="87" count="78" type="cond" truecount="2" falsecount="0"/>
+        <line num="88" count="78" type="cond" truecount="2" falsecount="0"/>
+        <line num="90" count="78" type="stmt"/>
+        <line num="91" count="126" type="stmt"/>
+        <line num="93" count="78" type="stmt"/>
+        <line num="102" count="30" type="stmt"/>
+        <line num="103" count="48" type="stmt"/>
+        <line num="104" count="48" type="stmt"/>
+        <line num="106" count="48" type="cond" truecount="3" falsecount="0"/>
+        <line num="107" count="36" type="stmt"/>
+        <line num="110" count="48" type="stmt"/>
+        <line num="113" count="30" type="stmt"/>
+        <line num="117" count="12" type="stmt"/>
+        <line num="125" count="18" type="stmt"/>
+        <line num="133" count="3" type="stmt"/>
+        <line num="134" count="3" type="stmt"/>
+        <line num="138" count="3" type="stmt"/>
+        <line num="139" count="3" type="stmt"/>
+        <line num="143" count="6" type="stmt"/>
+        <line num="147" count="6" type="stmt"/>
+        <line num="151" count="3" type="stmt"/>
+        <line num="152" count="3" type="stmt"/>
+        <line num="156" count="6" type="stmt"/>
+        <line num="160" count="6" type="stmt"/>
+        <line num="164" count="3" type="stmt"/>
+        <line num="165" count="3" type="stmt"/>
+        <line num="169" count="2" type="stmt"/>
+        <line num="173" count="2" type="stmt"/>
+      </file>
+      <file name="rough_session_statistics.ts" path="/Users/michael/Private/typing/src/domain/session/rough_session_statistics.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="10" coveredmethods="10"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+      </file>
+      <file name="session_result.ts" path="/Users/michael/Private/typing/src/domain/session/session_result.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="typewriter">
+      <metrics statements="43" coveredstatements="43" conditionals="10" coveredconditionals="10" methods="10" coveredmethods="10"/>
+      <file name="line.ts" path="/Users/michael/Private/typing/src/domain/typewriter/line.ts">
+        <metrics statements="38" coveredstatements="38" conditionals="10" coveredconditionals="10" methods="6" coveredmethods="6"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="9" count="11" type="stmt"/>
+        <line num="10" count="11" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
+        <line num="14" count="11" type="stmt"/>
+        <line num="15" count="11" type="stmt"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="25" count="10" type="stmt"/>
+        <line num="27" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="29" count="6" type="cond" truecount="1" falsecount="0"/>
+        <line num="30" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="38" count="11" type="stmt"/>
+        <line num="42" count="57" type="stmt"/>
+        <line num="45" count="57" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="7" type="stmt"/>
+        <line num="48" count="50" type="stmt"/>
+        <line num="51" count="57" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="51" type="stmt"/>
+        <line num="53" count="51" type="stmt"/>
+        <line num="55" count="6" type="stmt"/>
+        <line num="56" count="6" type="stmt"/>
+        <line num="61" count="57" type="stmt"/>
+        <line num="65" count="51" type="stmt"/>
+        <line num="68" count="51" type="cond" truecount="1" falsecount="0"/>
+        <line num="69" count="7" type="stmt"/>
+        <line num="71" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="74" count="6" type="stmt"/>
+        <line num="77" count="7" type="stmt"/>
+        <line num="78" count="7" type="stmt"/>
+        <line num="79" count="7" type="stmt"/>
+        <line num="80" count="7" type="stmt"/>
+      </file>
+      <file name="word.ts" path="/Users/michael/Private/typing/src/domain/typewriter/word.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="11" type="stmt"/>
+        <line num="6" count="50" type="stmt"/>
+        <line num="10" count="17" type="stmt"/>
+        <line num="14" count="112" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
