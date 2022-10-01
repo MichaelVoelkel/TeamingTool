@@ -1,110 +1,170 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { useEffect, useState } from 'react'
+import Konva from 'konva';
+import React, { createRef, forwardRef, MutableRefObject, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
 import { Group, Rect, Text } from "react-konva";
+import MemberDto from 'adapter/MemberDto';
+
+const highlightColor = "#ffffff";
+const normalColor = "#eeeeff";
+const rectStrokeColor = "#aaa";
 
 export interface TeamProperties {
-    names: string[];
+    id: string;
+    label: string;
+    members: MemberDto[];
+    x: number;
+    y: number;
+    handleDragStart?: (teamID: string, memberID: string) => void;
+    handleDragMove?: (teamID: string, memberID: string) => void;
+    handleDragEnd?: (teamID: string, memberID: string) => void;
+    rectRef?: React.Ref<TeamHandle>;
 }
 
 interface MemberProperties {
-    id: string,
-    name: string,
-    y: number
+    id: string;
+    name: string;
+    x: number;
+    y: number;    
 }
 
-export function Team(props: TeamProperties) {
-    const names = props.names;
+export interface TeamHandle {
+    getXInParent: () => number;
+    getYInParent: () => number;
+    getWidth: () => number;
+    getHeight: () => number;
+    focus: () => void;
+    unfocus: () => void;
+    getID: () => string;
+};
+
+const TeamFct = (props: TeamProperties) => {
     const FONT_SIZE = 14;
     const LINE_HEIGHT = FONT_SIZE * 1.5;
-    const PADDING = 4;
+    const PADDING = 8;
+    const MEMBER_MARGIN_TOP = LINE_HEIGHT;
 
     const [totalHeight, setTotalHeight] = useState(0);
-    const [members, setMembers] = useState<MemberProperties[]>([]);
+    const [memberRepr, setMemberRepr] = useState<MemberProperties[]>([]);
 
     const renderAgain = () => {
         let y = 0;
 
-        let candidates = members.map(member => member.name);
+        let candidates = props.members;
 
-        names.forEach((name: string) => {
-            let found = candidates.find(existingName => existingName == name) !== undefined;
+        props.members.forEach((member: MemberDto) => {
+            let found = candidates.find(existingID => existingID.id == member.id) !== undefined;
             if(!found) {
-                candidates.push(name);
+                candidates.push(member);
             }
-        })
+        });
 
-        const newMembers = candidates.map((name: string) => {
+        const newMembers = candidates.map((memberDto: MemberDto) => {
             const member = {
-                id: name,
-                name: name,
-                y: y
+                id: memberDto.id,
+                name: memberDto.label,
+                x: Math.random(), // <1 but different so it updates
+                y: y + Math.random() // same
             }
-            y += LINE_HEIGHT;
+            y += LINE_HEIGHT + Math.random();
             
             return member;
         });
 
-        setMembers([...newMembers]);
-        console.log("Do change");
+        setMemberRepr(newMembers.slice());
 
-        setTotalHeight(props.names.length * LINE_HEIGHT);
+        setTotalHeight(newMembers.length * LINE_HEIGHT + MEMBER_MARGIN_TOP + 2 + PADDING);
     };
 
     useEffect(() => {
         renderAgain();
-    }, [props.names]);
+    }, [props.members]);
 
-    let changed = false;
+    useImperativeHandle(props.rectRef, () => ({
+        getXInParent: () => rectRef.current!.getAbsolutePosition().x,
+        getYInParent: () => rectRef.current!.getAbsolutePosition().y,
+        getWidth: () => rectRef.current!.width(),
+        getHeight: () => rectRef.current!.height(),
+        focus: () => rectRef.current!.fill(highlightColor),
+        unfocus: () => rectRef.current!.fill(normalColor),
+        getID: () => props.id
+    }));
 
-    const onMv = (e: KonvaEventObject<DragEvent>) => {
-        const text = e.target;
-        const targetIdx = members.findIndex(member => member.id == text.id());
-        const target = members[targetIdx];
+    const memberRefs = useRef<{[key:string]: MutableRefObject<Konva.Text>}>({});
+    memberRepr.forEach((member: MemberProperties) =>
+        memberRefs.current![member.id] = memberRefs.current![member.id] ?? createRef<Text>()
+    )
 
-        for(let memberIdx in members) {
-            let member = members[memberIdx];
-            if(member.id != target!.id) {
-                const movedUp = member.y < target!.y && member.y > e.target.position().y;
-                const movedDown = member.y > target!.y && member.y < e.target.position().y;
-                if(movedUp || movedDown) {
-                    const temp = members[targetIdx];
-                    members[targetIdx] = members[memberIdx];
-                    members[memberIdx] = temp;
-                    console.log("MV: tried swapping " + memberIdx + " " + targetIdx);
-                    changed = true;
-                    // more sense makes some swap logic
-                    break;
-                }
-            }
+    const [rectWidth, setRectWidth] = useState<number>(0);
+
+    useLayoutEffect(() => {
+        let maxWidth = 0;
+        for(const child of Object.values(memberRefs.current!)) {
+            maxWidth = Math.max(maxWidth, child.current?.width() ?? 0);
         }
-    };
+        maxWidth = Math.max(maxWidth, titleRef.current?.width() ?? 0);
+        setRectWidth(maxWidth + PADDING * 2);
+    });
 
-    const onDrEnd = () => {
-        console.log("Changed " + changed);
-        if(changed) {
-            setMembers([...members]);
-            renderAgain();
-        }
-    };
+    const rectRef = useRef<Konva.Rect>(null);
+    const titleRef = useRef<Konva.Text>(null);
 
-    return <Group draggable x={300}>
-        <Rect id="rect" stroke={Math.floor(Math.random()*16777215).toString(16)} width={100} height={totalHeight}></Rect>
+    const result = <Group draggable x={props.x} y={props.y}>
+        <Rect
+            ref={rectRef}
+            team={props.id}
+            fill={normalColor}
+            stroke={rectStrokeColor} 
+            width={rectWidth}
+            height={totalHeight}
+        />
 
-        {members.map((member: MemberProperties) => { 
-            let onMove: Function;
-            const row = <Text draggable 
-                onDragStart={(e) => {e.cancelBubble = true;}}
-                key={Math.floor(Math.random()*16777215).toString(16)}
+        <Text
+            ref={titleRef}
+            key="title"
+            fontSize={FONT_SIZE}
+            fontStyle="bold"
+            text={props.label}
+            x={rectWidth / 2 - (titleRef.current?.width() ?? 0) / 2}
+            y={PADDING}
+            align="center"
+        />
+
+        {memberRepr.map((member: MemberProperties) => {
+            const row = <Text
+                draggable 
+                ref={memberRefs.current![member.id]}
+                key={member.id}
                 id={member.id}
                 fontSize={FONT_SIZE}
                 text={member.name}
-                onDragMove={(e) => onMv(e)}
-                onDragEnd={onDrEnd}
-                x={PADDING}
-                y={member.y+PADDING} />
+                onDragStart={(e) => {
+                    e.cancelBubble = true;
+                    props.handleDragStart?.(props.id, member.id);
+                }}
+                onDragMove={() => {
+                    props.handleDragMove?.(props.id, member.id)
+                    memberRefs.current![member.id].current!.moveToTop();
+                }}
+                onDragEnd={() => {
+                    props.handleDragEnd?.(props.id, member.id);
+                    console.log("Anyway render again")
+                    renderAgain();
+                }}
+                x={member.x+PADDING}
+                y={member.y+PADDING+MEMBER_MARGIN_TOP}
+            />
 
             return row;
         })}
         
     </Group>
-}
+
+    return result;
+};
+
+export const Team = React.forwardRef<TeamHandle, TeamProperties>((props, ref) => {
+    const newProps = {
+        ...props,
+        rectRef: ref
+    };
+    return <TeamFct {...newProps} />
+});
