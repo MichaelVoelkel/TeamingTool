@@ -3,6 +3,7 @@ import { ThemeContext } from "frontend/themes";
 import Konva from "konva";
 import React, { createRef, MutableRefObject, useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { Group, Text } from "react-konva";
+import { isJSDocThisTag } from "typescript";
 import {SkillTag, SkillTagHandle} from "./SkillTag";
 
 export interface MemberRowProperties {
@@ -29,7 +30,14 @@ const MemberRowFct = (props: MemberRowProperties) => {
     const groupRef = useRef<Konva.Group>(null);
 
     useImperativeHandle(props.handleRef, () => ({
-        getWidth: () => (textRef.current?.width() ?? 0) + skillTagX[skillTagX.length - 1] - (skillTagX[0] ?? 0),
+        getWidth: () => {
+            if(skillTagX.length > 0) {
+                let width = textRef.current?.width() ?? 0;
+                width += skillTagX[skillTagX.length - 1] - (skillTagX[0] ?? 0);
+                return width;
+            }
+            return NaN;
+        },
         getHeight: () => textRef.current?.height() ?? 0
     }));
 

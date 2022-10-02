@@ -115,7 +115,7 @@ const TeamFct = (props: TeamProperties) => {
             team={props.id}
             fill={normalColor}
             stroke={rectStrokeColor} 
-            width={rectWidth}
+            width={isNaN(rectWidth) ? 0 : rectWidth}
             height={totalHeight}
         />
 
@@ -124,7 +124,7 @@ const TeamFct = (props: TeamProperties) => {
             key="title"
             fontStyle="bold"
             text={props.label}
-            x={rectWidth / 2 - (titleRef.current?.width() ?? 0) / 2}
+            x={(isNaN(rectWidth) ? 0 : rectWidth) / 2 - (titleRef.current?.width() ?? 0) / 2}
             y={theme.padding}
             align="center"
         />
@@ -133,7 +133,7 @@ const TeamFct = (props: TeamProperties) => {
             ref={memberRefs.current![member.id]}
             teamID={props.id}
             key={member.id}
-            x={isNaN(member.x) ? 0 : member.x}
+            x={member.x}
             y={member.y}
             label={member.name}
             memberID={member.id}

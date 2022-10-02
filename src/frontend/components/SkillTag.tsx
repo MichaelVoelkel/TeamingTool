@@ -36,7 +36,7 @@ const SkillTagFct = (props: SkillTagProperties) => {
             ref={rectRef}
             cornerRadius={2}
             fill={props.skill.color}
-            x={isNaN(props.x) ? 0 : props.x}
+            x={props.x}
             y={props.y - theme.padding/2}
             width={(textRef.current?.width() ?? 0) + theme.padding}
             height={(textRef.current?.height() ?? 0) + theme.padding}
@@ -44,7 +44,7 @@ const SkillTagFct = (props: SkillTagProperties) => {
         <Text
             _useStrictMode
             fontSize={theme.fontSize}
-            x={isNaN(props.x + theme.padding / 2) ? 0 : props.x + theme.padding / 2}
+            x={props.x + theme.padding / 2}
             y={props.y}
             ref={textRef}
             text={props.skill.label + ":" + props.skill.level}
