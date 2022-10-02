@@ -22,14 +22,20 @@ export default function Home(props: any) {
                     skills: [
                         {
                             id: "Qt",
-                            label: "Qt23",
+                            label: "Qt",
                             level: 5,
                             color: "#ffaaaa"
+                        },
+                        {
+                            id: "C++",
+                            label: "C++",
+                            level: 4,
+                            color: "#aaaaff"
                         }
                     ]
                 },
                 {
-                    id: "member2",
+                    id: "member2n",
                     label: "James London",
                     skills: []
                 }

@@ -1,7 +1,7 @@
 import SkillDto from "adapter/SkillDto";
 import { ThemeContext } from "frontend/themes";
 import Konva from "konva";
-import React, { useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import React, { createRef, MutableRefObject, useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { Group, Text } from "react-konva";
 import {SkillTag, SkillTagHandle} from "./SkillTag";
 
@@ -16,12 +16,12 @@ export interface MemberRowProperties {
     onDragStart?: (teamID: string, memberID: string) => void;
     onDragMove?: (teamID: string, memberID: string) => void;
     onDragEnd?: (teamID: string, memberID: string) => void;
-};
+}
 
 export interface MemberRowHandle {
     getWidth: () => number;
     getHeight: () => number;
-};
+}
 
 const MemberRowFct = (props: MemberRowProperties) => {
     const theme = useContext(ThemeContext);
@@ -29,16 +29,29 @@ const MemberRowFct = (props: MemberRowProperties) => {
     const groupRef = useRef<Konva.Group>(null);
 
     useImperativeHandle(props.handleRef, () => ({
-        getWidth: () => (textRef.current?.width() ?? 0) + (skillTagRef.current?.getWidth() ?? 0) + theme.memberTagSpacing,
+        getWidth: () => (textRef.current?.width() ?? 0) + skillTagX[skillTagX.length - 1] - (skillTagX[0] ?? 0),
         getHeight: () => textRef.current?.height() ?? 0
     }));
 
-    const skillTagRef = useRef<SkillTagHandle>(null);
-    const [skillTagX, setSkillTagX] = useState<number>(0);
+    const skillTagRefs = useRef<{[key:string]:MutableRefObject<SkillTagHandle>}>({});
+    props.skills.forEach((skill: SkillDto) => {
+        skillTagRefs.current![skill.id] = skillTagRefs.current![skill.id] ?? createRef();
+    });
+
+    const [skillTagX, setSkillTagX] = useState<number[]>([]);
     
     useLayoutEffect(() => {
-        setSkillTagX((textRef.current?.x() ?? 0) + (textRef.current?.width() ?? 0) + theme.memberTagSpacing);
-    });
+        const x: number[] = [];
+        x.push((textRef.current?.x() ?? 0) + (textRef.current?.width() ?? 0) + theme.memberTagSpacing);
+
+        Object.values(skillTagRefs.current!).forEach((ref: MutableRefObject<SkillTagHandle>) => {
+            const lastX = x[x.length - 1];
+            const newX = lastX + theme.memberTagSpacing + skillTagRefs.current![ref.current!.getID()].current!.getWidth();
+            x.push(newX ?? 0);
+        });
+
+        setSkillTagX(x);
+    }, []);
 
     const row = <Group
         _useStrictMode // then, render also updates x/y, so resetting is a change
@@ -64,12 +77,14 @@ const MemberRowFct = (props: MemberRowProperties) => {
             fontSize={theme.fontSize}
             text={props.label}
         />
+        {props.skills.map((skill: SkillDto, index: number) => 
         <SkillTag
-            ref={skillTagRef}
-            skill={props.skills[0] ?? {}}
-            x={skillTagX}
+            key={skill.id}
+            ref={skillTagRefs.current![skill.id]}
+            skill={skill ?? {}}
+            x={isNaN(skillTagX[index]) ? 0 : skillTagX[index]}
             y={0}
-        />
+        />)}
     </Group>
 
     return row;

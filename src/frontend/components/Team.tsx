@@ -5,7 +5,6 @@ import MemberDto from 'adapter/MemberDto';
 import SkillDto from 'adapter/SkillDto';
 import { MemberRow, MemberRowHandle } from './MemberRow';
 import { ThemeContext } from 'frontend/themes';
-import { Context } from 'konva/lib/Context';
 
 const highlightColor = "#ffffff";
 const normalColor = "#eeeeff";
@@ -39,7 +38,7 @@ export interface TeamHandle {
     focus: () => void;
     unfocus: () => void;
     getID: () => string;
-};
+}
 
 const TeamFct = (props: TeamProperties) => {
     const theme = useContext(ThemeContext);
@@ -50,10 +49,10 @@ const TeamFct = (props: TeamProperties) => {
     const renderAgain = () => {
         let y = 0;
 
-        let candidates = props.members;
+        const candidates = props.members;
 
         props.members.forEach((member: MemberDto) => {
-            let found = candidates.find(existingID => existingID.id == member.id) !== undefined;
+            const found = candidates.find(existingID => existingID.id == member.id) !== undefined;
             if(!found) {
                 candidates.push(member);
             }
@@ -134,13 +133,13 @@ const TeamFct = (props: TeamProperties) => {
             ref={memberRefs.current![member.id]}
             teamID={props.id}
             key={member.id}
-            x={member.x}
+            x={isNaN(member.x) ? 0 : member.x}
             y={member.y}
             label={member.name}
             memberID={member.id}
             skills={member.skills}
-            onDragStart={props.handleDragStart ?? (() => {})}
-            onDragMove={props.handleDragMove ?? (() => {})}
+            onDragStart={props.handleDragStart}
+            onDragMove={props.handleDragMove}
             onDragEnd={(teamID: string, memberID: string) => {
                 props.handleDragEnd?.(teamID, memberID);
                 renderAgain();

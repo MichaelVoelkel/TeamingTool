@@ -11,7 +11,7 @@ export default interface TeamDto {
 }
 
 export const createTeamDto = (team: Team, persons: Person[]): TeamDto => {
-    let teamDto: TeamDto = {
+    const teamDto: TeamDto = {
         id: team.id,
         label: team.label,
         x: team.x,
@@ -20,14 +20,14 @@ export const createTeamDto = (team: Team, persons: Person[]): TeamDto => {
     };
     
     for(const person of persons) {
-        let memberDto: MemberDto = {
+        const memberDto: MemberDto = {
             id: person.id,
             label: person.name,
             skills: []
         };
         
         for(const skill of person.skills) {
-            let skillDto = {
+            const skillDto = {
                 id: skill.id,
                 label: skill.id,
                 level: skill.level,
