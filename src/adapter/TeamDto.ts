@@ -1,6 +1,5 @@
 import Team from "domain/entity/Team";
 import Person from "domain/entity/Person";
-import Skill from "domain/skill/Skill";
 import MemberDto from "./MemberDto";
 
 export default interface TeamDto {
@@ -31,7 +30,8 @@ export const createTeamDto = (team: Team, persons: Person[]): TeamDto => {
             let skillDto = {
                 id: skill.id,
                 label: skill.id,
-                level: skill.level
+                level: skill.level,
+                color: skill.color
             };
             memberDto.skills.push(skillDto);
         }

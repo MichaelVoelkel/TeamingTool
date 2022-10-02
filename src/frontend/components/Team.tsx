@@ -1,7 +1,11 @@
 import Konva from 'konva';
-import React, { createRef, forwardRef, MutableRefObject, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
+import React, { createRef, MutableRefObject, useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
 import { Group, Rect, Text } from "react-konva";
 import MemberDto from 'adapter/MemberDto';
+import SkillDto from 'adapter/SkillDto';
+import { MemberRow, MemberRowHandle } from './MemberRow';
+import { ThemeContext } from 'frontend/themes';
+import { Context } from 'konva/lib/Context';
 
 const highlightColor = "#ffffff";
 const normalColor = "#eeeeff";
@@ -23,7 +27,8 @@ interface MemberProperties {
     id: string;
     name: string;
     x: number;
-    y: number;    
+    y: number;
+    skills: SkillDto[]
 }
 
 export interface TeamHandle {
@@ -37,10 +42,7 @@ export interface TeamHandle {
 };
 
 const TeamFct = (props: TeamProperties) => {
-    const FONT_SIZE = 14;
-    const LINE_HEIGHT = FONT_SIZE * 1.5;
-    const PADDING = 8;
-    const MEMBER_MARGIN_TOP = LINE_HEIGHT;
+    const theme = useContext(ThemeContext);
 
     const [totalHeight, setTotalHeight] = useState(0);
     const [memberRepr, setMemberRepr] = useState<MemberProperties[]>([]);
@@ -61,17 +63,18 @@ const TeamFct = (props: TeamProperties) => {
             const member = {
                 id: memberDto.id,
                 name: memberDto.label,
-                x: Math.random(), // <1 but different so it updates
-                y: y + Math.random() // same
+                x: 0, // <1 but different so it updates
+                y: y,
+                skills: memberDto.skills
             }
-            y += LINE_HEIGHT + Math.random();
+            y += theme.lineHeight + Math.random();
             
             return member;
         });
 
         setMemberRepr(newMembers.slice());
 
-        setTotalHeight(newMembers.length * LINE_HEIGHT + MEMBER_MARGIN_TOP + 2 + PADDING);
+        setTotalHeight(newMembers.length * theme.lineHeight + theme.memberMarginTop + 2 + theme.padding);
     };
 
     useEffect(() => {
@@ -88,7 +91,7 @@ const TeamFct = (props: TeamProperties) => {
         getID: () => props.id
     }));
 
-    const memberRefs = useRef<{[key:string]: MutableRefObject<Konva.Text>}>({});
+    const memberRefs = useRef<{[key:string]: MutableRefObject<MemberRowHandle>}>({});
     memberRepr.forEach((member: MemberProperties) =>
         memberRefs.current![member.id] = memberRefs.current![member.id] ?? createRef<Text>()
     )
@@ -98,10 +101,10 @@ const TeamFct = (props: TeamProperties) => {
     useLayoutEffect(() => {
         let maxWidth = 0;
         for(const child of Object.values(memberRefs.current!)) {
-            maxWidth = Math.max(maxWidth, child.current?.width() ?? 0);
+            maxWidth = Math.max(maxWidth, child.current?.getWidth() ?? 0);
         }
         maxWidth = Math.max(maxWidth, titleRef.current?.width() ?? 0);
-        setRectWidth(maxWidth + PADDING * 2);
+        setRectWidth(maxWidth + theme.padding * 2);
     });
 
     const rectRef = useRef<Konva.Rect>(null);
@@ -120,43 +123,31 @@ const TeamFct = (props: TeamProperties) => {
         <Text
             ref={titleRef}
             key="title"
-            fontSize={FONT_SIZE}
             fontStyle="bold"
             text={props.label}
             x={rectWidth / 2 - (titleRef.current?.width() ?? 0) / 2}
-            y={PADDING}
+            y={theme.padding}
             align="center"
         />
 
-        {memberRepr.map((member: MemberProperties) => {
-            const row = <Text
-                draggable 
-                ref={memberRefs.current![member.id]}
-                key={member.id}
-                id={member.id}
-                fontSize={FONT_SIZE}
-                text={member.name}
-                onDragStart={(e) => {
-                    e.cancelBubble = true;
-                    props.handleDragStart?.(props.id, member.id);
-                }}
-                onDragMove={() => {
-                    props.handleDragMove?.(props.id, member.id)
-                    memberRefs.current![member.id].current!.moveToTop();
-                }}
-                onDragEnd={() => {
-                    props.handleDragEnd?.(props.id, member.id);
-                    console.log("Anyway render again")
-                    renderAgain();
-                }}
-                x={member.x+PADDING}
-                y={member.y+PADDING+MEMBER_MARGIN_TOP}
-            />
+        {memberRepr.map((member: MemberProperties) => <MemberRow
+            ref={memberRefs.current![member.id]}
+            teamID={props.id}
+            key={member.id}
+            x={member.x}
+            y={member.y}
+            label={member.name}
+            memberID={member.id}
+            skills={member.skills}
+            onDragStart={props.handleDragStart ?? (() => {})}
+            onDragMove={props.handleDragMove ?? (() => {})}
+            onDragEnd={(teamID: string, memberID: string) => {
+                props.handleDragEnd?.(teamID, memberID);
+                renderAgain();
+            }}
+        />)}
 
-            return row;
-        })}
-        
-    </Group>
+        </Group>
 
     return result;
 };

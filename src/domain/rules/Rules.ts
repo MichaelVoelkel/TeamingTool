@@ -1,4 +1,4 @@
-import Skill from "domain/skill/Skill";
+import Skill from "domain/entity/Skill";
 
 export interface Rule {
     weight : number;

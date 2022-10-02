@@ -3,10 +3,11 @@ import MainController from "app/main_controller";
 import Konva from "konva";
 import {Team as TeamComp, TeamHandle} from "frontend/components/Team";
 import React, { createRef, MutableRefObject, useRef, useState } from "react";
-import { Label, Stage, Layer } from "react-konva";
+import { Stage, Layer } from "react-konva";
 import MemberDto from "adapter/MemberDto";
+import { Theme, ThemeContext } from "./themes";
 
-export default function Home(props: any) {
+export default function Home(props: any) {    
     const {mainController}: {mainController: MainController} = props;
     const [teams, setTeams] = useState<TeamDto[]>([
         {
@@ -18,7 +19,14 @@ export default function Home(props: any) {
                 {
                     id: "member1",
                     label: "Megan Patita",
-                    skills: []
+                    skills: [
+                        {
+                            id: "Qt",
+                            label: "Qt23",
+                            level: 5,
+                            color: "#ffaaaa"
+                        }
+                    ]
                 },
                 {
                     id: "member2",
@@ -63,7 +71,7 @@ export default function Home(props: any) {
         }
     };
 
-    const handleDragMove = (teamID: string, memberID: string) => {
+    const handleDragMove = () => {
         const pos = stageRef.current!.getPointerPosition()!;
         let hoveredTeam: TeamHandle | undefined;
 
@@ -128,26 +136,28 @@ export default function Home(props: any) {
     const teamRefs = useRef<{[key:string]: MutableRefObject<TeamHandle>}>({});
     teams.forEach((team: TeamDto) => teamRefs.current![team.id] = teamRefs.current![team.id] ?? createRef());
 
-    return <div className="flex flex-col text-zinc-400 h-full overflow-hidden">
-        <h1 className="text-4xl p-10 text-center w-full flex-0 ">Teaming</h1>
+    return <ThemeContext.Provider value={Theme.default}>
+        <div className="flex flex-col text-zinc-400 h-full overflow-hidden">
+            <h1 className="text-4xl p-10 text-center w-full flex-0 ">Teaming</h1>
 
-        <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
-            <Layer ref={layerRef}>
-                {teams.map((team: TeamDto) =>
-                    <TeamComp
-                        key={team.id}
-                        ref={teamRefs.current![team.id]}
-                        id={team.id}
-                        label={team.label}
-                        x={team.x}
-                        y={team.y}
-                        members={team.members}
-                        handleDragStart={handleDragStart}
-                        handleDragMove={handleDragMove}
-                        handleDragEnd={handleDragEnd}
-                    />
-                )}                
-            </Layer>
-        </Stage>
-    </div>
+            <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
+                <Layer ref={layerRef}>
+                    {teams.map((team: TeamDto) =>
+                        <TeamComp
+                            key={team.id}
+                            ref={teamRefs.current![team.id]}
+                            id={team.id}
+                            label={team.label}
+                            x={team.x}
+                            y={team.y}
+                            members={team.members}
+                            handleDragStart={handleDragStart}
+                            handleDragMove={handleDragMove}
+                            handleDragEnd={handleDragEnd}
+                        />
+                    )}                
+                </Layer>
+            </Stage>
+        </div>
+    </ThemeContext.Provider>
 }
